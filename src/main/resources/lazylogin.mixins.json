@@ -3,7 +3,9 @@
 	"package": "masterlazy.lazylogin.mixin",
 	"compatibilityLevel": "JAVA_8",
 	"mixins": [
-		"ExampleMixin"
+		"PlayerManagerMixin",
+		"ServerPlayNetworkHandlerMixin",
+		"WhitelistMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

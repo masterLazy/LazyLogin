@@ -1,0 +1,13 @@
+{
+  "connect.msg": "§e欢迎来到服务器！ 游玩前请先登录。\n§b用 /login 登录\n用 /register 为你的用户名注册",
+  "connect.title": "§e欢迎， ",
+
+  "login.logged": "§e你已经登录了！",
+  "login.unregistered": "§c你尚未注册！ 请使用 /register 注册。",
+  "login.success": "§a登录成功。",
+  "login.failed": "§c密码不匹配。",
+
+  "reg.registered": "§c你已经注册了！ 请使用 /login 登录。",
+  "reg.pwdNotMatch": "§c两次输入的密码不一致， 请重试。",
+  "reg.success": "§a注册成功。"
+}
