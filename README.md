@@ -7,7 +7,7 @@
 ## 提供的功能
 
 - 玩家在进入服务器的时候必须使用 `/register` 命令注册账号，或者使用 `/login` 登录已注册的用户名。未登录时玩家处于无敌状态。（基于 [login](https://github.com/Londiuh/login)）
-- 玩家可以通过 `/password change` 更改密码，拥有 `op` 权限的玩家还可以使用 `/password reset` 重置一名玩家的密码或者使用 `/password reload` 来重新加载 `registered-players.json`。（从 1.2.0 版本）
+- 玩家可以通过 `/password change` 更改密码，拥有 `op` 权限的玩家还可以使用 `/password reset` 重置一名玩家的密码或者使用 `/password reload` 来重新加载 `registered-players.json`。
 - 服务器根据玩家的用户名，把密码的 SHA-256 记录在 `registered-players.json` 中。（更安全）
 - 服务器通过识别玩家的用户名来实现白名单管理（而不是 UUID）。
 - 可以通过修改 `.jar` 内 `\assets\lazylogin\lang.json` 自定义文本，或者翻译成其他语言。
