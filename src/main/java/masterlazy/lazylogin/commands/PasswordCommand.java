@@ -72,7 +72,6 @@ public class PasswordCommand {
                             ServerPlayerEntity player = ctx.getSource().getPlayer();
                             RegisteredPlayersJson.read();
                             ctx.getSource().sendFeedback(LangManager.getText("pwd.reload.success"), true);
-                            LoginMod.LOGGER.info("(lazylogin) Reloaded passwords.");
                             player.networkHandler.sendPacket(new PlaySoundIdS2CPacket(
                                     new Identifier("minecraft:block.note_block.pling"),
                                     SoundCategory.MASTER, player.getPos(), 100f, 0f));

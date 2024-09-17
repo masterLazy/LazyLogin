@@ -101,7 +101,7 @@ public class RegisteredPlayersJson {
         try {
             BufferedReader bufferedReader = Files.newReader(REGISTERED_PLAYERS, StandardCharsets.UTF_8);
             jsonArray = gson.fromJson(bufferedReader, JsonArray.class);
-            LoginMod.LOGGER.info("(lazylogin) Loaded passwords.");
+            LoginMod.LOGGER.info("(lazylogin) Loaded registered-players.json");
         } catch (Exception e) {
             e.printStackTrace();
         }
