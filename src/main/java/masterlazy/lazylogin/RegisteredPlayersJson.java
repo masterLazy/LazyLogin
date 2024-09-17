@@ -1,10 +1,12 @@
 package masterlazy.lazylogin;
 
 import org.apache.commons.codec.digest.DigestUtils;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
+
 import com.google.common.io.Files;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -31,7 +33,7 @@ public class RegisteredPlayersJson {
             return null;
         }
         for (int i = 0; i < jsonArray.size(); i++) {
-            JsonObject playerObjectIndex = jsonArray.get(i).getAsJsonObject(); 
+            JsonObject playerObjectIndex = jsonArray.get(i).getAsJsonObject();
             if (playerObjectIndex.get("name").getAsString().equals(username)) {
                 playerObject = playerObjectIndex;
                 break;
@@ -41,10 +43,24 @@ public class RegisteredPlayersJson {
     }
 
     public static void save(String username, String password) {
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("name", username);
-        jsonObject.addProperty("pwd_hash", DigestUtils.sha256Hex(password));
-        jsonArray.add(jsonObject);
+        JsonObject playerObject = findPlayerObject(username);
+        if (playerObject != null) {
+            for (int i = 0; i < jsonArray.size(); i++) {
+                JsonObject playerObjectIndex = jsonArray.get(i).getAsJsonObject();
+                if (playerObjectIndex.get("name").getAsString().equals(username)) {
+                    playerObject = new JsonObject();
+                    playerObject.addProperty("name", username);
+                    playerObject.addProperty("pwd_hash", DigestUtils.sha256Hex(password));
+                    jsonArray.set(i, playerObject);
+                    break;
+                }
+            }
+        } else {
+            playerObject = new JsonObject();
+            playerObject.addProperty("name", username);
+            playerObject.addProperty("pwd_hash", DigestUtils.sha256Hex(password));
+            jsonArray.add(playerObject);
+        }
         try {
             BufferedWriter bufferedWriter = Files.newWriter(REGISTERED_PLAYERS, StandardCharsets.UTF_8);
             bufferedWriter.write(gson.toJson(jsonArray));
@@ -54,13 +70,38 @@ public class RegisteredPlayersJson {
         }
     }
 
+    public static boolean remove(String username) {
+        JsonObject playerObject = findPlayerObject(username);
+        boolean removed = false;
+        if (playerObject != null) {
+            for (int i = 0; i < jsonArray.size(); i++) {
+                JsonObject playerObjectIndex = jsonArray.get(i).getAsJsonObject();
+                if (playerObjectIndex.get("name").getAsString().equals(username)) {
+                    jsonArray.remove(i);
+                    removed = true;
+                    break;
+                }
+            }
+        }
+        if (! removed) return false;
+        try {
+            BufferedWriter bufferedWriter = Files.newWriter(REGISTERED_PLAYERS, StandardCharsets.UTF_8);
+            bufferedWriter.write(gson.toJson(jsonArray));
+            bufferedWriter.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
+
     public static void read() {
-        if (!REGISTERED_PLAYERS.exists()) {
+        if (! REGISTERED_PLAYERS.exists()) {
             return;
         }
         try {
             BufferedReader bufferedReader = Files.newReader(REGISTERED_PLAYERS, StandardCharsets.UTF_8);
             jsonArray = gson.fromJson(bufferedReader, JsonArray.class);
+            LoginMod.LOGGER.info("(lazylogin) Loaded passwords.");
         } catch (Exception e) {
             e.printStackTrace();
         }

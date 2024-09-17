@@ -1,13 +1,25 @@
 {
   "connect.msg": "§e欢迎来到服务器！ 游玩前请先登录。\n§b用 /login 登录\n用 /register 为你的用户名注册",
-  "connect.title": "§e欢迎， ",
+  "connect.title": "§e欢迎， <playername>",
 
   "login.logged": "§e你已经登录了！",
   "login.unregistered": "§c你尚未注册！ 请使用 /register 注册。",
+  "login.incorrectPwd": "§c密码不匹配，请重试。",
   "login.success": "§a登录成功。",
-  "login.failed": "§c密码不匹配。",
 
   "reg.registered": "§c你已经注册了！ 请使用 /login 登录。",
   "reg.pwdNotMatch": "§c两次输入的密码不一致， 请重试。",
-  "reg.success": "§a注册成功。"
+  "reg.success": "§a注册成功。",
+
+  "pwd.change.incorrectPwd": "§c旧密码不匹配，请重试。",
+  "pwd.change.pwdNotMatch": "§c两次输入的密码不一致， 请重试。",
+  "pwd.change.success": "§a密码更改成功。",
+
+  "pwd.reset.incorrectPwd": "§c你的密码不匹配，请重试。",
+  "pwd.reset.unregistered": "§e密码重置失败，该用户未注册。",
+  "pwd.reset.success": "§a已重置 <playername> 的密码。",
+
+  "pwd.reload.success": "§a密码已重新加载。",
+
+  "msg.unlogged": "§e请先登录再发送信息。"
 }

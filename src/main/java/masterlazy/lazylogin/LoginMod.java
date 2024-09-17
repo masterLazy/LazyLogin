@@ -17,6 +17,7 @@ public class LoginMod implements ModInitializer {
         CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> {
             LoginCommand.register(dispatcher);
             RegisterCommand.register(dispatcher);
+            PasswordCommand.register(dispatcher);
         });
         LangManager.loadLang();
     }

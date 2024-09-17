@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import net.minecraft.text.LiteralText;
+
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -25,7 +26,8 @@ public class LangManager {
                 return;
             }
             Reader reader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
-            Type typeOfMap = new TypeToken<Map<String, String>>() {}.getType();
+            Type typeOfMap = new TypeToken<Map<String, String>>() {
+            }.getType();
             lang = gson.fromJson(reader, typeOfMap);
             LoginMod.LOGGER.info("(lazylogin) Loaded lang.json");
         } catch (Exception e) {
@@ -36,9 +38,8 @@ public class LangManager {
     public static String get(String key) {
         if (lang.containsKey(key)) {
             return lang.get(key);
-        }
-        else {
-            LoginMod.LOGGER.error("(lazylogin) Failed to load text "+key);
+        } else {
+            LoginMod.LOGGER.error("(lazylogin) Failed to load text " + key);
             return "Error";
         }
     }

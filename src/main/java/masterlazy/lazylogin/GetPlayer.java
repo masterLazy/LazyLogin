@@ -1,6 +1,7 @@
 package masterlazy.lazylogin;
 
 import net.minecraft.server.network.ServerPlayerEntity;
+
 import java.util.HashMap;
 import java.util.UUID;
 

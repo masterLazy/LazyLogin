@@ -13,7 +13,7 @@ public class OnPlayerConnect {
         playerLogin.setLoggedIn(false);
         player.setInvulnerable(true);
         player.sendMessage(LangManager.getText("connect.msg"), false);
-        String title = LangManager.get("connect.title") + playerLogin.getPlayer().getEntityName();
+        String title = LangManager.get("connect.title").replace("<playername>",player.getEntityName());
         player.networkHandler.sendPacket(new TitleS2CPacket(TitleS2CPacket.Action.TITLE, new LiteralText(title)));
     }
 }

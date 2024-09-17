@@ -1,5 +1,6 @@
 package masterlazy.lazylogin.listeners;
 
+import masterlazy.lazylogin.LangManager;
 import masterlazy.lazylogin.LoginMod;
 import masterlazy.lazylogin.PlayerLogin;
 import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
@@ -12,8 +13,11 @@ public class OnGameMessage {
         PlayerLogin playerLogin = LoginMod.getPlayer(player);
         String message = packet.getChatMessage();
         // TODO: config to allow more commands when you're not logged
-        if (!playerLogin.isLoggedIn() && (message.startsWith("/login") || message.startsWith("/register"))) {
+        if (! playerLogin.isLoggedIn() && (message.startsWith("/login") || message.startsWith("/register"))) {
             return true;
+        } else if(! playerLogin.isLoggedIn()){
+            player.sendMessage(LangManager.getText("msg.unlogged"), false);
+            return false;
         }
         return playerLogin.isLoggedIn();
     }
