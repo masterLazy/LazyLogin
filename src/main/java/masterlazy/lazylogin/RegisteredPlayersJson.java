@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 
 import com.google.common.io.Files;
 import com.google.gson.Gson;
@@ -101,10 +102,18 @@ public class RegisteredPlayersJson {
         try {
             BufferedReader bufferedReader = Files.newReader(REGISTERED_PLAYERS, StandardCharsets.UTF_8);
             jsonArray = gson.fromJson(bufferedReader, JsonArray.class);
-            LoginMod.LOGGER.info("(lazylogin) Loaded registered-players.json");
+            LazyLogin.LOGGER.info("(lazylogin) Loaded registered-players.json");
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static ArrayList<String> getPlayers() {
+        ArrayList<String> list = new ArrayList<>();
+        for (int i = 0; i < jsonArray.size(); i++) {
+            list.add(jsonArray.get(i).getAsJsonObject().get("name").getAsString());
+        }
+        return list;
     }
 }
 

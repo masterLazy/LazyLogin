@@ -19,7 +19,7 @@
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"masterlazy.lazylogin.LoginMod"
+          "masterlazy.lazylogin.LazyLogin"
 		]
 	},
 	"mixins": [

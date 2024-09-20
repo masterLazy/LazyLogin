@@ -1,7 +1,7 @@
 package masterlazy.lazylogin.commands;
 
+import masterlazy.lazylogin.LazyLogin;
 import masterlazy.lazylogin.LangManager;
-import masterlazy.lazylogin.LoginMod;
 import masterlazy.lazylogin.PlayerLogin;
 import masterlazy.lazylogin.RegisteredPlayersJson;
 import com.mojang.brigadier.CommandDispatcher;
@@ -21,7 +21,7 @@ public class LoginCommand {
         dispatcher.register(literal("login")
                 .then(argument("password", StringArgumentType.word())
                         .executes(ctx -> {
-                            PlayerLogin playerLogin = LoginMod.getPlayer(ctx.getSource().getPlayer());
+                            PlayerLogin playerLogin = LazyLogin.getPlayer(ctx.getSource().getPlayer());
                             String password = StringArgumentType.getString(ctx, "password");
                             ServerPlayerEntity player = ctx.getSource().getPlayer();
                             String username = player.getEntityName();
@@ -37,8 +37,9 @@ public class LoginCommand {
                                 if (! player.isCreative()) {
                                     player.setInvulnerable(false);
                                 }
-                                ctx.getSource().sendFeedback(LangManager.getText("login.success"), false);
-                                LoginMod.LOGGER.info("(lazylogin) " + username + " logged in.");
+                                LazyLogin.sendGlobalMessage(ctx.getSource().getMinecraftServer(),
+                                        LangManager.get("login.success").replace("%s",username));
+                                LazyLogin.LOGGER.info("(lazylogin) " + username + " logged in.");
                                 player.networkHandler.sendPacket(new PlaySoundIdS2CPacket(
                                         new Identifier("minecraft:block.note_block.pling"),
                                         SoundCategory.MASTER, player.getPos(), 100f, 0f));
