@@ -22,7 +22,7 @@
   "pwd.reload.success": "§a密码已重新加载",
 
   "pwd.list.begin": "§e共有%d名已注册玩家\n",
-  "pwd.list.warn": "§c共有%d名玩家在白名单中却未注册\n",
+  "pwd.list.warn": "§c共有%d名未注册玩家在白名单中\n",
 
   "msg.unlogged": "§e请先登录再发送信息"
 }
