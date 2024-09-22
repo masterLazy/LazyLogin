@@ -68,7 +68,7 @@ public class PasswordCommand {
                                             return 1;
                                         }))))
                 .then(literal("reload")
-                        .requires(source -> source.hasPermissionLevel(4)) //op only
+                        .requires(source -> source.hasPermissionLevel(3)) //op only
                         .executes(ctx -> {
                             ServerPlayerEntity player = ctx.getSource().getPlayer();
                             RegisteredPlayersJson.read();
@@ -79,7 +79,7 @@ public class PasswordCommand {
                             return 1;
                         }))
                 .then(literal("list")
-                        .requires(source -> source.hasPermissionLevel(4)) //op only
+                        .requires(source -> source.hasPermissionLevel(3)) //op only
                         .executes(ctx -> {
                             String msg = "";
                             ArrayList<String> regList = RegisteredPlayersJson.getPlayers();
