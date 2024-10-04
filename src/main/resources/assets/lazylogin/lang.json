@@ -1,5 +1,7 @@
 {
-  "connect.msg": "§e欢迎来到服务器！ 游玩前请先登录\n§b用 /login 登录\n用 /register 为你的用户名注册",
+  "connect.msg": "§e欢迎来到服务器！ 游玩前请先登录",
+  "connect.newUser": "§b你尚未注册，请用 /register 为你的用户名注册",
+  "connect.oldUser": "§e§b你已之策，请用 /login 登录你的用户名",
   "connect.title": "§e欢迎， %s",
 
   "login.logged": "§e你已经登录了",
