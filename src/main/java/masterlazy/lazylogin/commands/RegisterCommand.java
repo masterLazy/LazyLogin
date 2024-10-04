@@ -36,7 +36,7 @@ public class RegisterCommand {
                                         player.setInvulnerable(false);
                                         ctx.getSource().sendFeedback(LangManager.getText("reg.success"), false);
                                         LazyLogin.sendGlobalMessage(ctx.getSource().getMinecraftServer(),
-                                                LangManager.get("login.success").replace("%s",username));
+                                                LangManager.get("login.success").replace("%s", username));
                                         LazyLogin.LOGGER.info("(lazylogin) " + username + " registered.");
                                         player.networkHandler.sendPacket(new PlaySoundIdS2CPacket(
                                                 new Identifier("minecraft:block.note_block.pling"),
