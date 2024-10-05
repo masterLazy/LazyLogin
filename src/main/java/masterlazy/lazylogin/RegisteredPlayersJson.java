@@ -71,30 +71,6 @@ public class RegisteredPlayersJson {
         }
     }
 
-    public static boolean remove(String username) {
-        JsonObject playerObject = findPlayerObject(username);
-        boolean removed = false;
-        if (playerObject != null) {
-            for (int i = 0; i < jsonArray.size(); i++) {
-                JsonObject playerObjectIndex = jsonArray.get(i).getAsJsonObject();
-                if (playerObjectIndex.get("name").getAsString().equals(username)) {
-                    jsonArray.remove(i);
-                    removed = true;
-                    break;
-                }
-            }
-        }
-        if (! removed) return false;
-        try {
-            BufferedWriter bufferedWriter = Files.newWriter(REGISTERED_PLAYERS, StandardCharsets.UTF_8);
-            bufferedWriter.write(gson.toJson(jsonArray));
-            bufferedWriter.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return true;
-    }
-
     public static void read() {
         if (! REGISTERED_PLAYERS.exists()) {
             return;

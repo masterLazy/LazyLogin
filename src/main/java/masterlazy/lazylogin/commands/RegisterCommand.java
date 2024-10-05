@@ -37,7 +37,7 @@ public class RegisterCommand {
                                         ctx.getSource().sendFeedback(LangManager.getText("reg.success"), false);
                                         LazyLogin.sendGlobalMessage(ctx.getSource().getMinecraftServer(),
                                                 LangManager.get("login.success").replace("%s", username));
-                                        LazyLogin.LOGGER.info("(lazylogin) " + username + " registered.");
+                                        LazyLogin.LOGGER.info("(lazylogin) " + username + " registered");
                                         player.networkHandler.sendPacket(new PlaySoundIdS2CPacket(
                                                 new Identifier("minecraft:block.note_block.pling"),
                                                 SoundCategory.MASTER, player.getPos(), 100f, 0f));

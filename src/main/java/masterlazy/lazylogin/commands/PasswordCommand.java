@@ -46,36 +46,30 @@ public class PasswordCommand {
                                                     return 1;
                                                 })))))
                 .then(literal("reset")
-                        .requires(source -> source.hasPermissionLevel(4)) //op only
-                        .then(argument("username", StringArgumentType.word())
-                                .then(argument("yourPassword", StringArgumentType.word())
-                                        .executes(ctx -> {
-                                            String username = StringArgumentType.getString(ctx, "username");
-                                            String opPassword = StringArgumentType.getString(ctx, "yourPassword");
-                                            ServerPlayerEntity player = ctx.getSource().getPlayer();
-                                            if (! RegisteredPlayersJson.isCorrectPassword(player.getEntityName(), opPassword)) {
-                                                ctx.getSource().sendFeedback(LangManager.getText("pwd.reset.incorrectPwd"), false);
-                                            } else if (! RegisteredPlayersJson.remove(username)) {
-                                                ctx.getSource().sendFeedback(LangManager.getText("pwd.reset.unregistered"), false);
-                                            } else {
-                                                String feedback = LangManager.get("pwd.reset.success").replace("%s", username);
-                                                ctx.getSource().sendFeedback(new LiteralText(feedback), true);
-                                                LazyLogin.LOGGER.warn("(lazylogin) Reset password of " + username + ".");
-                                                player.networkHandler.sendPacket(new PlaySoundIdS2CPacket(
-                                                        new Identifier("minecraft:block.note_block.pling"),
-                                                        SoundCategory.MASTER, player.getPos(), 100f, 0f));
-                                            }
-                                            return 1;
-                                        }))))
+                        .requires(source -> source.hasPermissionLevel(3)) //op only
+                        .then(argument("target", StringArgumentType.word())
+                                .executes(ctx -> {
+                                    String target = StringArgumentType.getString(ctx, "target");
+                                    ServerPlayerEntity player = ctx.getSource().getPlayer();
+                                    if (! RegisteredPlayersJson.isPlayerRegistered(target)) {
+                                        ctx.getSource().sendFeedback(LangManager.getText("pwd.reset.unregistered"), false);
+                                    } else {
+                                        String password = LazyLogin.generatePassword();
+                                        RegisteredPlayersJson.save(target, password);
+                                        String feedback = LangManager.get("pwd.reset.success").replace("%s", target) + password;
+                                        ctx.getSource().sendFeedback(new LiteralText(feedback), true);
+                                        LazyLogin.LOGGER.info("(lazylogin) " + target + "'s password has been reset to: " + password);
+                                        player.networkHandler.sendPacket(new PlaySoundIdS2CPacket(
+                                                new Identifier("minecraft:block.note_block.pling"),
+                                                SoundCategory.MASTER, player.getPos(), 100f, 0f));
+                                    }
+                                    return 1;
+                                })))
                 .then(literal("reload")
                         .requires(source -> source.hasPermissionLevel(3)) //op only
                         .executes(ctx -> {
-                            ServerPlayerEntity player = ctx.getSource().getPlayer();
                             RegisteredPlayersJson.read();
                             ctx.getSource().sendFeedback(LangManager.getText("pwd.reload.success"), true);
-                            player.networkHandler.sendPacket(new PlaySoundIdS2CPacket(
-                                    new Identifier("minecraft:block.note_block.pling"),
-                                    SoundCategory.MASTER, player.getPos(), 100f, 0f));
                             return 1;
                         }))
                 .then(literal("list")
@@ -96,18 +90,18 @@ public class PasswordCommand {
                             String[] opList = playerManager.getOpList().getNames();
                             String[] whiteList = playerManager.getWhitelist().getNames();
                             ArrayList<String> warnList = new ArrayList<>();
-                            for (String s:opList){
-                                if(! regList.contains(s)){
+                            for (String s : opList) {
+                                if (! regList.contains(s)) {
                                     warnList.add(s);
                                 }
                             }
-                            for (String s:whiteList){
-                                if(! regList.contains(s)){
+                            for (String s : whiteList) {
+                                if (! regList.contains(s)) {
                                     warnList.add(s);
                                 }
                             }
-                            if(!warnList.isEmpty()){
-                                msg = msg.concat("\n").concat(LangManager.get("pwd.list.warn").replace("%d",String.valueOf(warnList.size())));
+                            if (! warnList.isEmpty()) {
+                                msg = msg.concat("\n").concat(LangManager.get("pwd.list.warn").replace("%d", String.valueOf(warnList.size())));
                                 for (int i = 0; i < warnList.size(); i++) {
                                     msg = msg.concat(warnList.get(i));
                                     if (i < warnList.size() - 1) {
