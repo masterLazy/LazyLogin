@@ -57,7 +57,7 @@ public class PasswordCommand {
                                         String password = LazyLogin.generatePassword();
                                         RegisteredPlayersJson.save(target, password);
                                         String feedback = LangManager.get("pwd.reset.success").replace("%s", target) + password;
-                                        ctx.getSource().sendFeedback(new LiteralText(feedback), true);
+                                        ctx.getSource().sendFeedback(new LiteralText(feedback), false);
                                         LazyLogin.LOGGER.info("(lazylogin) " + target + "'s password has been reset to: " + password);
                                         player.networkHandler.sendPacket(new PlaySoundIdS2CPacket(
                                                 new Identifier("minecraft:block.note_block.pling"),

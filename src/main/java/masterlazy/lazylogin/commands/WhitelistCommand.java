@@ -31,12 +31,15 @@ public class WhitelistCommand {
                                     //Register for target
                                     RegisteredPlayersJson.save(target, password);
                                     // Add target to whitelist
-                                    ctx.getSource().getMinecraftServer().getCommandManager()
-                                            .execute(ctx.getSource(), "whitelist add " + target);
                                     if(Arrays.stream(whitelist.getNames()).noneMatch(s -> s.equals(target))) {
+                                        ctx.getSource().getMinecraftServer().getCommandManager()
+                                                .execute(ctx.getSource(), "whitelist add " + target);
                                         String feedback = LangManager.get("whitelist.safe_add.pwd").replace("%s", target) + password;
                                         ctx.getSource().sendFeedback(new LiteralText(feedback), false);
                                         LazyLogin.LOGGER.info("(lazylogin) " + target + "'s initial password is: " + password);
+                                    }
+                                    else {
+                                        ctx.getSource().sendFeedback(LangManager.getText("whitelist.safe_add.failed"), false);
                                     }
                                     return 1;
                                 }))));

@@ -27,5 +27,6 @@
 
   "msg.unlogged": "§e请先登录再发送信息",
 
+  "whitelist.safe_add.failed": "§c该玩家已在白名单中",
   "whitelist.safe_add.pwd": "§e%s的初始密码为:"
 }
