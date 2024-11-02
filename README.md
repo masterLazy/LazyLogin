@@ -2,7 +2,7 @@
 
 一个 Fabric 服务器端 Mod。主要适用于离线服务器。提供了登录功能，并优化了白名单功能和玩家数据管理。
 
-登录的相关功能参考了这个仓库的代码：[login](https://github.com/Londiuh/login) 。原仓库的许可证文件名为 `LINCENSE_login`。
+登录的相关功能参考了这个仓库的代码：[login](https://github.com/Londiuh/login) 。原仓库的许可证文件名为 `login_license.txt`。
 
 ## 提供的功能
 
