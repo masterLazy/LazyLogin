@@ -50,7 +50,6 @@ public class PasswordCommand {
                         .then(argument("target", StringArgumentType.word())
                                 .executes(ctx -> {
                                     String target = StringArgumentType.getString(ctx, "target");
-                                    ServerPlayerEntity player = ctx.getSource().getPlayer();
                                     if (! RegisteredPlayersJson.isPlayerRegistered(target)) {
                                         ctx.getSource().sendFeedback(LangManager.getText("pwd.reset.unregistered"), false);
                                     } else {
@@ -59,9 +58,6 @@ public class PasswordCommand {
                                         String feedback = LangManager.get("pwd.reset.success").replace("%s", target) + password;
                                         ctx.getSource().sendFeedback(new LiteralText(feedback), false);
                                         LazyLogin.LOGGER.info("(lazylogin) " + target + "'s password has been reset to: " + password);
-                                        player.networkHandler.sendPacket(new PlaySoundIdS2CPacket(
-                                                new Identifier("minecraft:block.note_block.pling"),
-                                                SoundCategory.MASTER, player.getPos(), 100f, 0f));
                                     }
                                     return 1;
                                 })))
@@ -77,7 +73,7 @@ public class PasswordCommand {
                         .executes(ctx -> {
                             String msg = "";
                             ArrayList<String> regList = RegisteredPlayersJson.getPlayers();
-                            //List all registered players
+                            // List all registered players
                             msg = msg.concat(LangManager.get("pwd.list.begin").replace("%d", String.valueOf(regList.size())));
                             for (int i = 0; i < regList.size(); i++) {
                                 msg = msg.concat(regList.get(i));
@@ -85,7 +81,7 @@ public class PasswordCommand {
                                     msg = msg.concat(",");
                                 }
                             }
-                            //Warn players in whitelist but not registered
+                            // Warn players in whitelist but not registered
                             PlayerManager playerManager = ctx.getSource().getMinecraftServer().getPlayerManager();
                             String[] opList = playerManager.getOpList().getNames();
                             String[] whiteList = playerManager.getWhitelist().getNames();
