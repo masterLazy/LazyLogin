@@ -10,11 +10,8 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import static net.minecraft.server.command.CommandManager.literal;
 import static net.minecraft.server.command.CommandManager.argument;
 
-import net.minecraft.network.packet.s2c.play.PlaySoundIdS2CPacket;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.util.Identifier;
 
 public class RegisterCommand {
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
@@ -38,9 +35,7 @@ public class RegisterCommand {
                                         LazyLogin.sendGlobalMessage(ctx.getSource().getMinecraftServer(),
                                                 LangManager.get("login.success").replace("%s", username));
                                         LazyLogin.LOGGER.info("(lazylogin) " + username + " registered");
-                                        player.networkHandler.sendPacket(new PlaySoundIdS2CPacket(
-                                                new Identifier("minecraft:block.note_block.pling"),
-                                                SoundCategory.MASTER, player.getPos(), 100f, 0f));
+                                        LazyLogin.playNotifySound(player);
                                     }
                                     return 1;
                                 }))));

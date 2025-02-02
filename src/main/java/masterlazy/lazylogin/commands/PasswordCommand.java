@@ -9,13 +9,10 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import static net.minecraft.server.command.CommandManager.literal;
 import static net.minecraft.server.command.CommandManager.argument;
 
-import net.minecraft.network.packet.s2c.play.PlaySoundIdS2CPacket;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.LiteralText;
-import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
 
@@ -39,9 +36,7 @@ public class PasswordCommand {
                                                         RegisteredPlayersJson.save(username, newPwd);
                                                         ctx.getSource().sendFeedback(LangManager.getText("pwd.change.success"), false);
                                                         LazyLogin.LOGGER.info("(lazylogin) " + username + " changed newPwd.");
-                                                        player.networkHandler.sendPacket(new PlaySoundIdS2CPacket(
-                                                                new Identifier("minecraft:block.note_block.pling"),
-                                                                SoundCategory.MASTER, player.getPos(), 100f, 0f));
+                                                        LazyLogin.playNotifySound(player);
                                                     }
                                                     return 1;
                                                 })))))

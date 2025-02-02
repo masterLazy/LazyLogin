@@ -6,6 +6,8 @@ import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.LiteralText;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -50,5 +52,9 @@ public class LazyLogin implements ModInitializer {
         return IntStream.range(0, LENGTH)
                 .mapToObj(i -> String.valueOf(CHAR.charAt(random.nextInt(CHAR.length()))))
                 .collect(Collectors.joining());
+    }
+
+    public static void playNotifySound(ServerPlayerEntity player) {
+        player.playSound(SoundEvents.BLOCK_NOTE_BLOCK_PLING, SoundCategory.BLOCKS, 1f, 1f);
     }
 }
