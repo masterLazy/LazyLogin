@@ -21,7 +21,7 @@ public class RegisterCommand {
                                 .executes(ctx -> {
                                     String password = StringArgumentType.getString(ctx, "newPassword");
                                     ServerPlayerEntity player = ctx.getSource().getPlayer();
-                                    String username = String.valueOf(player.getName());
+                                    String username = player.getName().getString();
                                     if (RegisteredPlayersJson.isPlayerRegistered(username)) {
                                         LazyLogin.sendFeedback(ctx, LangManager.get("reg.registered"), false);
                                     } else if (! password.equals(StringArgumentType.getString(ctx, "confirmPassword"))) {
@@ -34,7 +34,7 @@ public class RegisterCommand {
                                         LazyLogin.sendFeedback(ctx, LangManager.get("reg.success"), false);
                                         LazyLogin.sendGlobalMessage(ctx,  LangManager.get("login.success").replace("%s", username));
                                         LazyLogin.LOGGER.info("(lazylogin) " + username + " registered");
-                                        LazyLogin.playNotifySound(player);
+                                        LazyLogin.playNotifySound(ctx);
                                     }
                                     return 1;
                                 }))));

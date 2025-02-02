@@ -1,7 +1,7 @@
 {
 	"required": true,
 	"package": "masterlazy.lazylogin.mixin",
-	"compatibilityLevel": "JAVA_8",
+	"compatibilityLevel": "JAVA_21",
 	"mixins": [
 		"PlayerManagerMixin",
 		"ServerPlayNetworkHandlerMixin",

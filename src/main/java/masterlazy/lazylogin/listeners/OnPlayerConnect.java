@@ -11,7 +11,7 @@ import net.minecraft.text.Text;
 public class OnPlayerConnect {
     public static void listen(ServerPlayerEntity player) {
         PlayerLogin playerLogin = LazyLogin.getPlayer(player);
-        String username = player.getEntityName();
+        String username = player.getName().getString();
         playerLogin.setLoggedIn(false);
         player.setInvulnerable(true);
         player.sendMessage(LangManager.getText("connect.msg"), false);
@@ -20,7 +20,7 @@ public class OnPlayerConnect {
         } else {
             player.sendMessage(LangManager.getText("connect.newUser"),false);
         }
-        String title = LangManager.get("connect.title").replace("%s",player.getEntityName());
-        player.networkHandler.sendPacket(new TitleS2CPacket(TitleS2CPacket.Action.TITLE, Text.of(title)));
+        String title = LangManager.get("connect.title").replace("%s", player.getName().getString());
+        player.networkHandler.sendPacket(new TitleS2CPacket(Text.of(title)));
     }
 }

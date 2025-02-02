@@ -22,7 +22,7 @@ public class LoginCommand {
                             PlayerLogin playerLogin = LazyLogin.getPlayer(ctx.getSource().getPlayer());
                             String password = StringArgumentType.getString(ctx, "password");
                             ServerPlayerEntity player = ctx.getSource().getPlayer();
-                            String username = String.valueOf(player.getName());
+                            String username = player.getName().getString();
 
                             if (playerLogin.isLoggedIn()) {
                                 LazyLogin.sendFeedback(ctx, LangManager.get("login.logged"), false);
@@ -37,7 +37,7 @@ public class LoginCommand {
                                 }
                                 LazyLogin.sendGlobalMessage(ctx, LangManager.get("login.success").replace("%s", username));
                                 LazyLogin.LOGGER.info("(lazylogin) " + username + " logged in");
-                                LazyLogin.playNotifySound(player);
+                                LazyLogin.playNotifySound(ctx);
                             }
                             return 1;
                         })));

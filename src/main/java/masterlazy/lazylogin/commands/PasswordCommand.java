@@ -27,8 +27,8 @@ public class PasswordCommand {
                                                     String oldPwd = StringArgumentType.getString(ctx, "oldPassword");
                                                     String newPwd = StringArgumentType.getString(ctx, "newPassword");
                                                     ServerPlayerEntity player = ctx.getSource().getPlayer();
-                                                    String username = String.valueOf(player.getName());
-                                                    if (! RegisteredPlayersJson.isCorrectPassword(String.valueOf(player.getName()), oldPwd)) {
+                                                    String username = player.getName().getString();
+                                                    if (! RegisteredPlayersJson.isCorrectPassword(player.getName().getString(), oldPwd)) {
                                                         LazyLogin.sendFeedback(ctx, LangManager.get("pwd.change.incorrectPwd"), false);
                                                     } else if (! newPwd.equals(StringArgumentType.getString(ctx, "confirmPassword"))) {
                                                         LazyLogin.sendFeedback(ctx, LangManager.get("pwd.change.pwdNotMatch"), false);
@@ -36,7 +36,7 @@ public class PasswordCommand {
                                                         RegisteredPlayersJson.save(username, newPwd);
                                                         LazyLogin.sendFeedback(ctx, LangManager.get("pwd.change.success"), false);
                                                         LazyLogin.LOGGER.info("(lazylogin) " + username + " changed newPwd.");
-                                                        LazyLogin.playNotifySound(player);
+                                                        LazyLogin.playNotifySound(ctx);
                                                     }
                                                     return 1;
                                                 })))))

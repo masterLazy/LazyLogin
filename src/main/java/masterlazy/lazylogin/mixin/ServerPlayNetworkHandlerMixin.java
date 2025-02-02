@@ -20,7 +20,7 @@ public class ServerPlayNetworkHandlerMixin {
             ci.cancel();
         }
     }
-    
+
     @Inject(method = "onPlayerAction", at = @At("HEAD"), cancellable = true)
     public void onPlayerAction(PlayerActionC2SPacket packet, CallbackInfo ci) {
         if (!OnPlayerAction.canInteract((ServerPlayNetworkHandler) (Object) this)) {
@@ -28,8 +28,8 @@ public class ServerPlayNetworkHandlerMixin {
         }
     }
 
-    @Inject(method = "onGameMessage", at = @At("HEAD"), cancellable = true)
-    public void onGameMessage(ChatMessageC2SPacket packet, CallbackInfo ci) {
+    @Inject(method = "onChatMessage", at = @At("HEAD"), cancellable = true)
+    public void onChatMessage(ChatMessageC2SPacket packet, CallbackInfo ci) {
         if (!OnGameMessage.canSendMessage((ServerPlayNetworkHandler) (Object) this, packet)) {
             ci.cancel();
         }

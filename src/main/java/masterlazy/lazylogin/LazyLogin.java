@@ -4,8 +4,7 @@ import masterlazy.lazylogin.commands.*;
 import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.server.command.ServerCommandSource;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
-import net.minecraft.server.MinecraftServer;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
@@ -28,7 +27,7 @@ public class LazyLogin implements ModInitializer {
         RegisteredPlayersJson.read();
         LangManager.loadLang();
         // Register commands
-        CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> {
+        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
             LoginCommand.register(dispatcher);
             RegisterCommand.register(dispatcher);
             PasswordCommand.register(dispatcher);
@@ -61,8 +60,10 @@ public class LazyLogin implements ModInitializer {
         ctx.getSource().sendFeedback(() -> Text.literal(msg),broadcastToOps);
     }
 
-    public static void playNotifySound(ServerPlayerEntity player) {
-        player.playSound(SoundEvents.BLOCK_NOTE_BLOCK_PLING, SoundCategory.BLOCKS, 1f, 1f);
+    public static void playNotifySound(CommandContext<ServerCommandSource> ctx) {
+        ServerPlayerEntity player = ctx.getSource().getPlayer();
+        ctx.getSource().getWorld().playSound(player,player.getBlockPos(),SoundEvents.BLOCK_NOTE_BLOCK_PLING.value(),
+                SoundCategory.MASTER,1f,0f);
     }
 
 }

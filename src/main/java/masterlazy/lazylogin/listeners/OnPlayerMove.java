@@ -11,7 +11,7 @@ public class OnPlayerMove {
         PlayerLogin playerLogin = LazyLogin.getPlayer(networkHandler.player);
         boolean isLoggedIn = playerLogin.isLoggedIn();
         if (!isLoggedIn) {
-            player.teleport(player.getX(), player.getY(), player.getZ()); // teleport to sync client position
+            player.teleport(player.getX(), player.getY(), player.getZ(), false); // teleport to sync client position
         }
         return isLoggedIn;
     }

@@ -31,7 +31,8 @@ public class WhitelistCommand {
                                     RegisteredPlayersJson.save(target, password);
                                     // Add target to whitelist
                                     if(Arrays.stream(whitelist.getNames()).noneMatch(s -> s.equals(target))) {
-                                        ctx.getSource().getMinecraftServer().getCommandManager();
+                                        ctx.getSource().getServer().getCommandManager().executeWithPrefix(
+                                                ctx.getSource(),"whitelist add" + target);
 
                                         String feedback = LangManager.get("whitelist.safe_add.pwd").replace("%s", target) + password;
                                         LazyLogin.sendFeedback(ctx, feedback, false);
