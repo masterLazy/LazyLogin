@@ -1,11 +1,11 @@
 package masterlazy.lazylogin;
 
-import org.apache.commons.codec.digest.DigestUtils;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
 import com.google.common.io.Files;
@@ -25,7 +25,7 @@ public class RegisteredPlayersJson {
 
     public static boolean isCorrectPassword(String username, String password) {
         JsonObject playerObject = findPlayerObject(username);
-        return playerObject != null && playerObject.get("pwd_hash").getAsString().equals(DigestUtils.sha256Hex(password));
+        return playerObject != null && playerObject.get("pwd_hash").getAsString().equals(sha256Hex(password));
     }
 
     private static JsonObject findPlayerObject(String username) {
@@ -51,7 +51,7 @@ public class RegisteredPlayersJson {
                 if (playerObjectIndex.get("name").getAsString().equals(username)) {
                     playerObject = new JsonObject();
                     playerObject.addProperty("name", username);
-                    playerObject.addProperty("pwd_hash", DigestUtils.sha256Hex(password));
+                    playerObject.addProperty("pwd_hash", sha256Hex(password));
                     jsonArray.set(i, playerObject);
                     break;
                 }
@@ -59,7 +59,7 @@ public class RegisteredPlayersJson {
         } else {
             playerObject = new JsonObject();
             playerObject.addProperty("name", username);
-            playerObject.addProperty("pwd_hash", DigestUtils.sha256Hex(password));
+            playerObject.addProperty("pwd_hash", sha256Hex(password));
             jsonArray.add(playerObject);
         }
         try {
@@ -90,6 +90,27 @@ public class RegisteredPlayersJson {
             list.add(jsonArray.get(i).getAsJsonObject().get("name").getAsString());
         }
         return list;
+    }
+
+    private static String sha256Hex(String str) {
+        byte[] bytes = str.getBytes(StandardCharsets.UTF_8);
+        MessageDigest messageDigest;
+        try {
+            messageDigest = MessageDigest.getInstance("SHA-256");
+            messageDigest.update(bytes);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("Failed to get sha-256 instance");
+        }
+        byte[] digest = messageDigest.digest();
+        StringBuilder sb = new StringBuilder();
+        for (byte b : digest) {
+            String temp = Integer.toHexString(b & 0xFF);
+            if (temp.length() == 1) {
+                sb.append("0");
+            }
+            sb.append(temp);
+        }
+        return sb.toString();
     }
 }
 
