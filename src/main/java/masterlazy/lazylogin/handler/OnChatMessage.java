@@ -8,7 +8,7 @@ import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 
 public class OnChatMessage {
-    public static boolean canSendMessage(ServerPlayNetworkHandler networkHandler, ChatMessageC2SPacket packet) {
+    public static boolean canSendMessage(ServerPlayNetworkHandler networkHandler) {
         ServerPlayerEntity player = networkHandler.player;
         PlayerLogin playerLogin = LazyLogin.getPlayer(player);
         if(!playerLogin.isLoggedIn()){

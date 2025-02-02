@@ -21,7 +21,7 @@ public class ServerPlayNetworkHandlerMixin {
 
     @Inject(method = "onChatMessage", at = @At("HEAD"), cancellable = true)
     public void onChatMessage(ChatMessageC2SPacket packet, CallbackInfo ci) {
-        if (!OnChatMessage.canSendMessage((ServerPlayNetworkHandler) (Object) this, packet)) {
+        if (!OnChatMessage.canSendMessage((ServerPlayNetworkHandler) (Object) this)) {
             ci.cancel();
         }
     }
