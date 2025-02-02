@@ -1,4 +1,4 @@
-package masterlazy.lazylogin.commands;
+package masterlazy.lazylogin.command;
 
 import masterlazy.lazylogin.LazyLogin;
 import masterlazy.lazylogin.LangManager;

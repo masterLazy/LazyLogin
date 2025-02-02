@@ -1,7 +1,9 @@
 package masterlazy.lazylogin;
 
-import masterlazy.lazylogin.commands.*;
+import masterlazy.lazylogin.command.*;
 import com.mojang.brigadier.context.CommandContext;
+import masterlazy.lazylogin.handler.OnPlayerAction;
+import net.fabricmc.fabric.api.event.player.*;
 import net.minecraft.network.packet.s2c.play.PlaySoundS2CPacket;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.command.ServerCommandSource;
@@ -12,6 +14,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
+import net.minecraft.util.ActionResult;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -34,6 +37,23 @@ public class LazyLogin implements ModInitializer {
             RegisterCommand.register(dispatcher);
             PasswordCommand.register(dispatcher);
             WhitelistCommand.register(dispatcher);
+        });
+        // Register listeners
+        // 字面上看，这里只监听了破坏方块和破坏实体两个事件，但是实际上所有Interaction都阻止了。
+        // 奇妙。
+        AttackBlockCallback.EVENT.register((player, world, hand, pos, direction) -> {
+            if (OnPlayerAction.canInteract(player)) {
+                return ActionResult.PASS;
+            } else {
+                return ActionResult.FAIL;
+            }
+        });
+        AttackEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
+            if (OnPlayerAction.canInteract(player)) {
+                return ActionResult.PASS;
+            } else {
+                return ActionResult.FAIL;
+            }
         });
     }
 
@@ -65,8 +85,6 @@ public class LazyLogin implements ModInitializer {
     public static void playNotifySound(CommandContext<ServerCommandSource> ctx) {
         ServerPlayerEntity player = ctx.getSource().getPlayer();
         if (player != null) {
-//        ctx.getSource().getWorld().playSound(null, player.getBlockPos(),SoundEvents.BLOCK_NOTE_BLOCK_PLING.value(),
-//                SoundCategory.MASTER,1f,0f);
             player.networkHandler.sendPacket(new PlaySoundS2CPacket(
                     RegistryEntry.of(SoundEvents.BLOCK_NOTE_BLOCK_PLING.value()),
                     SoundCategory.MASTER,

@@ -29,7 +29,7 @@ public class LangManager {
             Type typeOfMap = new TypeToken<Map<String, String>>() {
             }.getType();
             lang = gson.fromJson(reader, typeOfMap);
-            //LazyLogin.LOGGER.info("(lazylogin) Loaded lang.json");
+            // LazyLogin.LOGGER.info("(lazylogin) Loaded lang.json");
         } catch (Exception e) {
             e.printStackTrace();
         }

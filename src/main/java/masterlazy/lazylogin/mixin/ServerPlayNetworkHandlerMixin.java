@@ -1,11 +1,9 @@
 package masterlazy.lazylogin.mixin;
 
-import masterlazy.lazylogin.listeners.OnGameMessage;
-import masterlazy.lazylogin.listeners.OnPlayerAction;
-import masterlazy.lazylogin.listeners.OnPlayerMove;
-import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
-import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket;
-import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
+import masterlazy.lazylogin.handler.OnChatMessage;
+import masterlazy.lazylogin.handler.OnCommandExecution;
+import masterlazy.lazylogin.handler.OnPlayerMove;
+import net.minecraft.network.packet.c2s.play.*;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -21,16 +19,16 @@ public class ServerPlayNetworkHandlerMixin {
         }
     }
 
-    @Inject(method = "onPlayerAction", at = @At("HEAD"), cancellable = true)
-    public void onPlayerAction(PlayerActionC2SPacket packet, CallbackInfo ci) {
-        if (!OnPlayerAction.canInteract((ServerPlayNetworkHandler) (Object) this)) {
-            ci.cancel(); // TODO: breaking a block desyncs with server
+    @Inject(method = "onChatMessage", at = @At("HEAD"), cancellable = true)
+    public void onChatMessage(ChatMessageC2SPacket packet, CallbackInfo ci) {
+        if (!OnChatMessage.canSendMessage((ServerPlayNetworkHandler) (Object) this, packet)) {
+            ci.cancel();
         }
     }
 
-    @Inject(method = "onChatMessage", at = @At("HEAD"), cancellable = true)
-    public void onChatMessage(ChatMessageC2SPacket packet, CallbackInfo ci) {
-        if (!OnGameMessage.canSendMessage((ServerPlayNetworkHandler) (Object) this, packet)) {
+    @Inject(method = "onCommandExecution", at = @At("HEAD"), cancellable = true)
+    public void onCommandExecution(CommandExecutionC2SPacket packet, CallbackInfo ci) {
+        if (!OnCommandExecution.canExecuteCommand((ServerPlayNetworkHandler) (Object) this, packet)) {
             ci.cancel();
         }
     }
