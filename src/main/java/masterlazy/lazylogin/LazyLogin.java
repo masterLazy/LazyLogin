@@ -2,10 +2,12 @@ package masterlazy.lazylogin;
 
 import masterlazy.lazylogin.commands.*;
 import com.mojang.brigadier.context.CommandContext;
+import net.minecraft.network.packet.s2c.play.PlaySoundS2CPacket;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.command.ServerCommandSource;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
-import net.minecraft.network.packet.s2c.play.PlaySoundIdS2CPacket;
+import net.minecraft.network.packet.s2c.play.PlaySoundFromEntityS2CPacket;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
@@ -63,8 +65,17 @@ public class LazyLogin implements ModInitializer {
 
     public static void playNotifySound(CommandContext<ServerCommandSource> ctx) {
         ServerPlayerEntity player = ctx.getSource().getPlayer();
-        ctx.getSource().getWorld().playSound(null, player.getBlockPos(),SoundEvents.BLOCK_NOTE_BLOCK_PLING.value(),
-                SoundCategory.MASTER,1f,0f);
+        if (player != null) {
+//        ctx.getSource().getWorld().playSound(null, player.getBlockPos(),SoundEvents.BLOCK_NOTE_BLOCK_PLING.value(),
+//                SoundCategory.MASTER,1f,0f);
+            player.networkHandler.sendPacket(new PlaySoundS2CPacket(
+                    RegistryEntry.of(SoundEvents.BLOCK_NOTE_BLOCK_PLING.value()),
+                    SoundCategory.MASTER,
+                    player.getPos().x,
+                    player.getPos().y,
+                    player.getPos().z,
+                    1f,0f,0));
+        }
     }
 
 }
