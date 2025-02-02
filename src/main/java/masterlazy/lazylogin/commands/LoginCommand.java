@@ -12,7 +12,6 @@ import static net.minecraft.server.command.CommandManager.argument;
 
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
 
 public class LoginCommand {
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {

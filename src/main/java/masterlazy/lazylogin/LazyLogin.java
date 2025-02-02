@@ -62,7 +62,7 @@ public class LazyLogin implements ModInitializer {
 
     public static void playNotifySound(CommandContext<ServerCommandSource> ctx) {
         ServerPlayerEntity player = ctx.getSource().getPlayer();
-        ctx.getSource().getWorld().playSound(player,player.getBlockPos(),SoundEvents.BLOCK_NOTE_BLOCK_PLING.value(),
+        ctx.getSource().getWorld().playSound(null, player.getBlockPos(),SoundEvents.BLOCK_NOTE_BLOCK_PLING.value(),
                 SoundCategory.MASTER,1f,0f);
     }
 
