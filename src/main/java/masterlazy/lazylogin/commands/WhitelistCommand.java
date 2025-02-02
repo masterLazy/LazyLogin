@@ -1,6 +1,5 @@
 package masterlazy.lazylogin.commands;
 
-import com.mojang.brigadier.ParseResults;
 import masterlazy.lazylogin.LazyLogin;
 import masterlazy.lazylogin.LangManager;
 import masterlazy.lazylogin.RegisteredPlayersJson;
@@ -12,7 +11,6 @@ import static net.minecraft.server.command.CommandManager.argument;
 
 import net.minecraft.server.Whitelist;
 import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.text.Text;
 
 import java.util.Arrays;
 
