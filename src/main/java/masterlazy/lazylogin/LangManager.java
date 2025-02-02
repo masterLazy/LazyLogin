@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -44,8 +44,8 @@ public class LangManager {
         }
     }
 
-    public static LiteralText getText(String key) {
-        return new LiteralText(get(key));
+    public static Text getText(String key) {
+        return Text.of(get(key));
     }
 }
 

@@ -12,7 +12,7 @@ import static net.minecraft.server.command.CommandManager.argument;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 
 import java.util.ArrayList;
 
@@ -27,14 +27,14 @@ public class PasswordCommand {
                                                     String oldPwd = StringArgumentType.getString(ctx, "oldPassword");
                                                     String newPwd = StringArgumentType.getString(ctx, "newPassword");
                                                     ServerPlayerEntity player = ctx.getSource().getPlayer();
-                                                    String username = player.getEntityName();
-                                                    if (! RegisteredPlayersJson.isCorrectPassword(player.getEntityName(), oldPwd)) {
-                                                        ctx.getSource().sendFeedback(LangManager.getText("pwd.change.incorrectPwd"), false);
+                                                    String username = String.valueOf(player.getName());
+                                                    if (! RegisteredPlayersJson.isCorrectPassword(String.valueOf(player.getName()), oldPwd)) {
+                                                        LazyLogin.sendFeedback(ctx, LangManager.get("pwd.change.incorrectPwd"), false);
                                                     } else if (! newPwd.equals(StringArgumentType.getString(ctx, "confirmPassword"))) {
-                                                        ctx.getSource().sendFeedback(LangManager.getText("pwd.change.pwdNotMatch"), false);
+                                                        LazyLogin.sendFeedback(ctx, LangManager.get("pwd.change.pwdNotMatch"), false);
                                                     } else {
                                                         RegisteredPlayersJson.save(username, newPwd);
-                                                        ctx.getSource().sendFeedback(LangManager.getText("pwd.change.success"), false);
+                                                        LazyLogin.sendFeedback(ctx, LangManager.get("pwd.change.success"), false);
                                                         LazyLogin.LOGGER.info("(lazylogin) " + username + " changed newPwd.");
                                                         LazyLogin.playNotifySound(player);
                                                     }
@@ -46,12 +46,12 @@ public class PasswordCommand {
                                 .executes(ctx -> {
                                     String target = StringArgumentType.getString(ctx, "target");
                                     if (! RegisteredPlayersJson.isPlayerRegistered(target)) {
-                                        ctx.getSource().sendFeedback(LangManager.getText("pwd.reset.unregistered"), false);
+                                        LazyLogin.sendFeedback(ctx, LangManager.get("pwd.reset.unregistered"), false);
                                     } else {
                                         String password = LazyLogin.generatePassword();
                                         RegisteredPlayersJson.save(target, password);
                                         String feedback = LangManager.get("pwd.reset.success").replace("%s", target) + password;
-                                        ctx.getSource().sendFeedback(new LiteralText(feedback), false);
+                                        LazyLogin.sendFeedback(ctx, feedback, false);
                                         LazyLogin.LOGGER.info("(lazylogin) " + target + "'s password has been reset to: " + password);
                                     }
                                     return 1;
@@ -60,7 +60,7 @@ public class PasswordCommand {
                         .requires(source -> source.hasPermissionLevel(3)) //op only
                         .executes(ctx -> {
                             RegisteredPlayersJson.read();
-                            ctx.getSource().sendFeedback(LangManager.getText("pwd.reload.success"), true);
+                            LazyLogin.sendFeedback(ctx, LangManager.get("pwd.reload.success"), true);
                             return 1;
                         }))
                 .then(literal("list")
@@ -77,7 +77,7 @@ public class PasswordCommand {
                                 }
                             }
                             // Warn players in whitelist but not registered
-                            PlayerManager playerManager = ctx.getSource().getMinecraftServer().getPlayerManager();
+                            PlayerManager playerManager = ctx.getSource().getServer().getPlayerManager();
                             String[] opList = playerManager.getOpList().getNames();
                             String[] whiteList = playerManager.getWhitelist().getNames();
                             ArrayList<String> warnList = new ArrayList<>();
@@ -100,7 +100,7 @@ public class PasswordCommand {
                                     }
                                 }
                             }
-                            ctx.getSource().sendFeedback(new LiteralText(msg), false);
+                            LazyLogin.sendFeedback(ctx, msg, false);
                             return 1;
                         })));
 

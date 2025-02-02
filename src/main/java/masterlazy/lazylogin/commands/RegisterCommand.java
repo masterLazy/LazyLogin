@@ -21,19 +21,18 @@ public class RegisterCommand {
                                 .executes(ctx -> {
                                     String password = StringArgumentType.getString(ctx, "newPassword");
                                     ServerPlayerEntity player = ctx.getSource().getPlayer();
-                                    String username = player.getEntityName();
+                                    String username = String.valueOf(player.getName());
                                     if (RegisteredPlayersJson.isPlayerRegistered(username)) {
-                                        ctx.getSource().sendFeedback(LangManager.getText("reg.registered"), false);
+                                        LazyLogin.sendFeedback(ctx, LangManager.get("reg.registered"), false);
                                     } else if (! password.equals(StringArgumentType.getString(ctx, "confirmPassword"))) {
-                                        ctx.getSource().sendFeedback(LangManager.getText("reg.pwdNotMatch"), false);
+                                        LazyLogin.sendFeedback(ctx, LangManager.get("reg.pwdNotMatch"), false);
                                     } else {
                                         RegisteredPlayersJson.save(username, password);
                                         PlayerLogin playerLogin = LazyLogin.getPlayer(player);
                                         playerLogin.setLoggedIn(true);
                                         player.setInvulnerable(false);
-                                        ctx.getSource().sendFeedback(LangManager.getText("reg.success"), false);
-                                        LazyLogin.sendGlobalMessage(ctx.getSource().getMinecraftServer(),
-                                                LangManager.get("login.success").replace("%s", username));
+                                        LazyLogin.sendFeedback(ctx, LangManager.get("reg.success"), false);
+                                        LazyLogin.sendGlobalMessage(ctx,  LangManager.get("login.success").replace("%s", username));
                                         LazyLogin.LOGGER.info("(lazylogin) " + username + " registered");
                                         LazyLogin.playNotifySound(player);
                                     }

@@ -1,5 +1,6 @@
 package masterlazy.lazylogin.commands;
 
+import com.mojang.brigadier.ParseResults;
 import masterlazy.lazylogin.LazyLogin;
 import masterlazy.lazylogin.LangManager;
 import masterlazy.lazylogin.RegisteredPlayersJson;
@@ -9,12 +10,10 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import static net.minecraft.server.command.CommandManager.literal;
 import static net.minecraft.server.command.CommandManager.argument;
 
-import net.minecraft.server.PlayerManager;
 import net.minecraft.server.Whitelist;
 import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 
-import java.security.SecureRandom;
 import java.util.Arrays;
 
 public class WhitelistCommand {
@@ -27,19 +26,19 @@ public class WhitelistCommand {
                                 .executes(ctx -> {
                                     String target = StringArgumentType.getString(ctx, "target");
                                     String password = LazyLogin.generatePassword();
-                                    Whitelist whitelist = ctx.getSource().getMinecraftServer().getPlayerManager().getWhitelist();
-                                    //Register for target
+                                    Whitelist whitelist = ctx.getSource().getServer().getPlayerManager().getWhitelist();
+                                    // Register for target
                                     RegisteredPlayersJson.save(target, password);
                                     // Add target to whitelist
                                     if(Arrays.stream(whitelist.getNames()).noneMatch(s -> s.equals(target))) {
-                                        ctx.getSource().getMinecraftServer().getCommandManager()
-                                                .execute(ctx.getSource(), "whitelist add " + target);
+                                        ctx.getSource().getMinecraftServer().getCommandManager();
+
                                         String feedback = LangManager.get("whitelist.safe_add.pwd").replace("%s", target) + password;
-                                        ctx.getSource().sendFeedback(new LiteralText(feedback), false);
+                                        LazyLogin.sendFeedback(ctx, feedback, false);
                                         LazyLogin.LOGGER.info("(lazylogin) " + target + "'s initial password is: " + password);
                                     }
                                     else {
-                                        ctx.getSource().sendFeedback(LangManager.getText("whitelist.safe_add.failed"), false);
+                                        LazyLogin.sendFeedback(ctx, LangManager.get("whitelist.safe_add.failed"), false);
                                     }
                                     return 1;
                                 }))));

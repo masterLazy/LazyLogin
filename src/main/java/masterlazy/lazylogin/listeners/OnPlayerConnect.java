@@ -6,7 +6,7 @@ import masterlazy.lazylogin.LangManager;
 import masterlazy.lazylogin.RegisteredPlayersJson;
 import net.minecraft.network.packet.s2c.play.TitleS2CPacket;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 
 public class OnPlayerConnect {
     public static void listen(ServerPlayerEntity player) {
@@ -21,6 +21,6 @@ public class OnPlayerConnect {
             player.sendMessage(LangManager.getText("connect.newUser"),false);
         }
         String title = LangManager.get("connect.title").replace("%s",player.getEntityName());
-        player.networkHandler.sendPacket(new TitleS2CPacket(TitleS2CPacket.Action.TITLE, new LiteralText(title)));
+        player.networkHandler.sendPacket(new TitleS2CPacket(TitleS2CPacket.Action.TITLE, Text.of(title)));
     }
 }
