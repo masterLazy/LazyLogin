@@ -2,7 +2,7 @@ package masterlazy.lazylogin.command;
 
 import masterlazy.lazylogin.LazyLogin;
 import masterlazy.lazylogin.LangManager;
-import masterlazy.lazylogin.PlayerLogin;
+import masterlazy.lazylogin.PlayerSession;
 import masterlazy.lazylogin.RegisteredPlayersJson;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
@@ -18,19 +18,19 @@ public class LoginCommand {
         dispatcher.register(literal("login")
                 .then(argument("password", StringArgumentType.word())
                         .executes(ctx -> {
-                            PlayerLogin playerLogin = LazyLogin.getPlayer(ctx.getSource().getPlayer());
+                            PlayerSession playerSession = LazyLogin.getPlayer(ctx.getSource().getPlayer());
                             String password = StringArgumentType.getString(ctx, "password");
                             ServerPlayerEntity player = ctx.getSource().getPlayer();
                             String username = player.getName().getString();
 
-                            if (playerLogin.isLoggedIn()) {
+                            if (playerSession.isLoggedIn()) {
                                 LazyLogin.sendFeedback(ctx, LangManager.get("login.logged"), false);
                             } else if (! RegisteredPlayersJson.isPlayerRegistered(username)) {
                                 LazyLogin.sendFeedback(ctx, LangManager.get("login.unregistered"), false);
                             } else if (! RegisteredPlayersJson.isCorrectPassword(username, password)) {
                                 LazyLogin.sendFeedback(ctx, LangManager.get("login.incorrectPwd"), false);
                             } else {
-                                playerLogin.setLoggedIn(true);
+                                playerSession.setLoggedIn(true);
                                 if (! player.isCreative()) {
                                     player.setInvulnerable(false);
                                 }

@@ -2,7 +2,7 @@ package masterlazy.lazylogin.command;
 
 import masterlazy.lazylogin.LazyLogin;
 import masterlazy.lazylogin.LangManager;
-import masterlazy.lazylogin.PlayerLogin;
+import masterlazy.lazylogin.PlayerSession;
 import masterlazy.lazylogin.RegisteredPlayersJson;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
@@ -28,8 +28,8 @@ public class RegisterCommand {
                                         LazyLogin.sendFeedback(ctx, LangManager.get("reg.pwdNotMatch"), false);
                                     } else {
                                         RegisteredPlayersJson.save(username, password);
-                                        PlayerLogin playerLogin = LazyLogin.getPlayer(player);
-                                        playerLogin.setLoggedIn(true);
+                                        PlayerSession playerSession = LazyLogin.getPlayer(player);
+                                        playerSession.setLoggedIn(true);
                                         player.setInvulnerable(false);
                                         LazyLogin.sendFeedback(ctx, LangManager.get("reg.success"), false);
                                         LazyLogin.sendGlobalMessage(ctx,  LangManager.get("login.success").replace("%s", username));

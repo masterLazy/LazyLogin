@@ -1,7 +1,7 @@
 package masterlazy.lazylogin.handler;
 
 import masterlazy.lazylogin.LazyLogin;
-import masterlazy.lazylogin.PlayerLogin;
+import masterlazy.lazylogin.PlayerSession;
 import masterlazy.lazylogin.LangManager;
 import masterlazy.lazylogin.RegisteredPlayersJson;
 import net.minecraft.network.packet.s2c.play.TitleS2CPacket;
@@ -10,9 +10,9 @@ import net.minecraft.text.Text;
 
 public class OnPlayerConnect {
     public static void handle(ServerPlayerEntity player) {
-        PlayerLogin playerLogin = LazyLogin.getPlayer(player);
+        PlayerSession playerSession = LazyLogin.getPlayer(player);
         String username = player.getName().getString();
-        playerLogin.setLoggedIn(false);
+        playerSession.setLoggedIn(false);
         player.setInvulnerable(true);
         player.sendMessage(LangManager.getText("connect.msg"), false);
         if (RegisteredPlayersJson.isPlayerRegistered(username)) {

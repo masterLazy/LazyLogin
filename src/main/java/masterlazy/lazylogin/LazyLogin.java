@@ -2,14 +2,13 @@ package masterlazy.lazylogin;
 
 import masterlazy.lazylogin.command.*;
 import com.mojang.brigadier.context.CommandContext;
-import masterlazy.lazylogin.handler.OnPlayerAction;
 import net.fabricmc.fabric.api.event.player.*;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.packet.s2c.play.PlaySoundS2CPacket;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.command.ServerCommandSource;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
-import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -23,9 +22,17 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class LazyLogin implements ModInitializer {
-    static GetPlayer getPlayer = new GetPlayer();
+    static PlayerManager playerManager = new PlayerManager();
     public static final Logger LOGGER = LogManager.getLogger("lazylogin");
     private static final SecureRandom random = new SecureRandom();
+
+    private ActionResult eventCallback(PlayerEntity player) {
+        if (playerManager.get((ServerPlayerEntity) player).isLoggedIn()) {
+            return ActionResult.PASS;
+        } else {
+            return ActionResult.FAIL;
+        }
+    }
 
     @Override
     public void onInitialize() {
@@ -39,26 +46,15 @@ public class LazyLogin implements ModInitializer {
             WhitelistCommand.register(dispatcher);
         });
         // Register listeners
-        // 字面上看，这里只监听了破坏方块和破坏实体两个事件，但是实际上所有Interaction都阻止了。
-        // 奇妙。
-        AttackBlockCallback.EVENT.register((player, world, hand, pos, direction) -> {
-            if (OnPlayerAction.canInteract(player)) {
-                return ActionResult.PASS;
-            } else {
-                return ActionResult.FAIL;
-            }
-        });
-        AttackEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
-            if (OnPlayerAction.canInteract(player)) {
-                return ActionResult.PASS;
-            } else {
-                return ActionResult.FAIL;
-            }
-        });
+        AttackBlockCallback.EVENT.register((player, world, hand, pos, direction) -> eventCallback(player));
+        AttackEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> eventCallback(player));
+        UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> eventCallback(player));
+        UseEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> eventCallback(player));
+        UseItemCallback.EVENT.register((player, world, hand) -> eventCallback(player));
     }
 
-    public static PlayerLogin getPlayer(ServerPlayerEntity player) {
-        return getPlayer.get(player);
+    public static PlayerSession getPlayer(ServerPlayerEntity player) {
+        return playerManager.get(player);
     }
 
     public static String generatePassword() {
@@ -72,7 +68,7 @@ public class LazyLogin implements ModInitializer {
     // Warps of APIs that is diff between versions
 
     public static void sendGlobalMessage(CommandContext<ServerCommandSource> ctx, String msg) {
-        PlayerManager playerManager = ctx.getSource().getServer().getPlayerManager();
+        net.minecraft.server.PlayerManager playerManager = ctx.getSource().getServer().getPlayerManager();
         for (ServerPlayerEntity player : playerManager.getPlayerList()) {
             player.sendMessage(Text.of(msg), false);
         }
