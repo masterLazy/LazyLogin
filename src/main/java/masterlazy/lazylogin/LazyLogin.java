@@ -58,6 +58,9 @@ public class LazyLogin implements ModInitializer {
     public static PlayerSession getPlayer(ServerPlayerEntity player) {
         return playerManager.get(player);
     }
+    public static PlayerSession initPlayer(ServerPlayerEntity player) {
+        return playerManager.init(player);
+    }
 
     public static String generatePassword() {
         final String CHAR = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";

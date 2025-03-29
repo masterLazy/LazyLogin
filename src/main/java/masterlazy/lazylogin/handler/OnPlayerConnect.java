@@ -10,7 +10,7 @@ import net.minecraft.text.Text;
 
 public class OnPlayerConnect {
     public static void handle(ServerPlayerEntity player) {
-        PlayerSession playerSession = LazyLogin.getPlayer(player);
+        PlayerSession playerSession = LazyLogin.initPlayer(player);
         String username = player.getName().getString();
         playerSession.setLoggedIn(false);
         player.setInvulnerable(true);

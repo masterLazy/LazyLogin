@@ -6,12 +6,22 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public class PlayerManager extends HashMap<UUID, PlayerSession> {
+    public PlayerSession init(ServerPlayerEntity player){
+        UUID uuid = player.getUuid();
+        if (containsKey(uuid)) {
+            super.get(uuid).init(player);
+            return super.get(uuid);
+        }
+        PlayerSession newPlayer = new PlayerSession(player);
+        put(uuid, newPlayer);
+        return newPlayer;
+    }
     public PlayerSession get(ServerPlayerEntity player){
         UUID uuid = player.getUuid();
         if (containsKey(uuid)) {
             return super.get(uuid);
         }
-        PlayerSession newPlayer = new PlayerSession(player, player.getX(), player.getY(), player.getZ());
+        PlayerSession newPlayer = new PlayerSession(player);
         put(uuid, newPlayer);
         return newPlayer;
     }
