@@ -5,6 +5,7 @@ import com.mojang.brigadier.context.CommandContext;
 import net.fabricmc.fabric.api.event.player.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.packet.s2c.play.PlaySoundS2CPacket;
+import net.minecraft.network.packet.s2c.play.TitleS2CPacket;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.command.ServerCommandSource;
 import net.fabricmc.api.ModInitializer;
@@ -30,6 +31,7 @@ public class LazyLogin implements ModInitializer {
         if (playerManager.get((ServerPlayerEntity) player).isLoggedIn()) {
             return ActionResult.PASS;
         } else {
+            ((ServerPlayerEntity)player).networkHandler.sendPacket(new TitleS2CPacket(LangManager.getText("unlogged.title")));
             return ActionResult.FAIL;
         }
     }
