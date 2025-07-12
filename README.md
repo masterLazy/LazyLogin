@@ -2,7 +2,7 @@
 
 一个 Fabric 服务器端 Mod。主要适用于离线服务器。提供了登录功能，并优化了白名单功能和玩家数据管理。
 
-登录的相关功能参考了这个仓库的代码：[login](https://github.com/Londiuh/login) 。原仓库的许可证文件名为 `login_license.txt`。
+登录的相关功能参考了这个仓库的代码：[login](https://github.com/Londiuh/login) 。原仓库的许可证文件名为 `LICENSE_login`。
 
 ## 功能简介
 
@@ -13,7 +13,7 @@
 
 - 增加 `/whitelist safe-add` 指令，进一步保护服务器安全。
 - 服务器根据玩家的用户名，把密码的哈希值记录在 `registered-players.json` 中（而不是明文，更安全）。
-- 可以通过修改 `.jar` 内 `\assets\lazylogin\lang.json` 自定义文本，或者翻译成其他语言 。
+- 可以通过修改 `.jar` 内 `/assets/lazylogin/lang.json` 自定义文本，或者翻译成其他语言 。
 
 功能细节见下节介绍。
 
@@ -46,7 +46,7 @@
 
 以下命令需要拥有 `op` 权限（权限等级至少为 `3`）：
 
-	#### `...reset <玩家>`
+#### `...reset <玩家>`
 
 重置该玩家的密码为随机密码。
 

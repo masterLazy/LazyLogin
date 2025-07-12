@@ -25,18 +25,18 @@ public class WhitelistCommand {
                                     String target = StringArgumentType.getString(ctx, "target");
                                     String password = LazyLogin.generatePassword();
                                     Whitelist whitelist = ctx.getSource().getServer().getPlayerManager().getWhitelist();
-                                    // Register for target
-                                    RegisteredPlayersJson.save(target, password);
-                                    // Add target to whitelist
+                                    // Check if the player is in the whitelist
                                     if(Arrays.stream(whitelist.getNames()).noneMatch(s -> s.equals(target))) {
+                                        // Register for target
+                                        RegisteredPlayersJson.save(target, password);
+                                        // Add target to whitelist
                                         ctx.getSource().getServer().getCommandManager().executeWithPrefix(
-                                                ctx.getSource(),"whitelist add" + target);
+                                                ctx.getSource(),"whitelist add " + target);
 
                                         String feedback = LangManager.get("whitelist.safe_add.pwd").replace("%s", target) + password;
                                         LazyLogin.sendFeedback(ctx, feedback, false);
                                         LazyLogin.LOGGER.info("(lazylogin) " + target + "'s initial password is: " + password);
-                                    }
-                                    else {
+                                    } else {
                                         LazyLogin.sendFeedback(ctx, LangManager.get("whitelist.safe_add.failed"), false);
                                     }
                                     return 1;
