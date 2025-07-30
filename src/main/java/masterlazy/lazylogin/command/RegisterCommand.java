@@ -33,7 +33,7 @@ public class RegisterCommand {
                                         player.setInvulnerable(false);
                                         LazyLogin.sendFeedback(ctx, LangManager.get("reg.success"), false);
                                         LazyLogin.sendGlobalMessage(ctx,  LangManager.get("login.success").replace("%s", username));
-                                        LazyLogin.LOGGER.info("(lazylogin) " + username + " registered");
+                                        LazyLogin.LOGGER.info("[LazyLogin] {} registered", username);
                                         LazyLogin.playNotifySound(ctx);
                                     }
                                     return 1;

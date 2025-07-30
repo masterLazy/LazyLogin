@@ -22,14 +22,14 @@ public class LangManager {
     public static void loadLang() {
         try (InputStream inputStream = classLoader.getResourceAsStream("assets/lazylogin/lang.json")) {
             if (inputStream == null) {
-                LazyLogin.LOGGER.error("(lazylogin) Failed to load lang.json");
+                LazyLogin.LOGGER.error("[LazyLogin] Failed to load lang.json");
                 return;
             }
             Reader reader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
             Type typeOfMap = new TypeToken<Map<String, String>>() {
             }.getType();
             lang = gson.fromJson(reader, typeOfMap);
-            // LazyLogin.LOGGER.info("(lazylogin) Loaded lang.json");
+            // LazyLogin.LOGGER.info("[LazyLogin] Loaded lang.json");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -39,7 +39,7 @@ public class LangManager {
         if (lang.containsKey(key)) {
             return lang.get(key);
         } else {
-            LazyLogin.LOGGER.error("(lazylogin) Failed to load text " + key);
+            LazyLogin.LOGGER.error("[LazyLogin] Failed to load text {}", key);
             return "Error";
         }
     }

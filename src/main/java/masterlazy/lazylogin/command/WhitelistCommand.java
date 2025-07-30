@@ -35,7 +35,7 @@ public class WhitelistCommand {
 
                                         String feedback = LangManager.get("whitelist.safe_add.pwd").replace("%s", target) + password;
                                         LazyLogin.sendFeedback(ctx, feedback, false);
-                                        LazyLogin.LOGGER.info("(lazylogin) " + target + "'s initial password is: " + password);
+                                        LazyLogin.LOGGER.info("[LazyLogin] {}'s initial password is: {}", target, password);
                                     } else {
                                         LazyLogin.sendFeedback(ctx, LangManager.get("whitelist.safe_add.failed"), false);
                                     }

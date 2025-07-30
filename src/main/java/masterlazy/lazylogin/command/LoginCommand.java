@@ -34,8 +34,8 @@ public class LoginCommand {
                                 if (! player.isCreative()) {
                                     player.setInvulnerable(false);
                                 }
-                                LazyLogin.sendGlobalMessage(ctx, LangManager.get("login.success").replace("%s", username));
-                                LazyLogin.LOGGER.info("(lazylogin) " + username + " logged in");
+                                LazyLogin.sendGlobalMessage(ctx, String.format(LangManager.get("login.success"),username));
+                                LazyLogin.LOGGER.info("[LazyLogin] {} logged in", username);
                                 LazyLogin.playNotifySound(ctx);
                             }
                             return 1;

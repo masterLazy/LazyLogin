@@ -12,15 +12,24 @@ public class OnPlayerConnect {
     public static void handle(ServerPlayerEntity player) {
         PlayerSession playerSession = LazyLogin.initPlayer(player);
         String username = player.getName().getString();
-        playerSession.setLoggedIn(false);
-        player.setInvulnerable(true);
+        if(player.getIp().equals("127.0.0.1")) {
+            playerSession.setLoggedIn(true);
+            if(! player.isCreative()) {
+                player.setInvulnerable(false);
+            }
+            LazyLogin.sendGlobalMessage(player.getServer().getPlayerManager(),String.format(LangManager.get("login.local"), username));
+            LazyLogin.LOGGER.info("[LazyLogin] Skipping login of local user {}", username);
+        } else {
+            playerSession.setLoggedIn(false);
+            player.setInvulnerable(true);
+        }
         player.sendMessage(LangManager.getText("connect.msg"), false);
         if (RegisteredPlayersJson.isPlayerRegistered(username)) {
             player.sendMessage(LangManager.getText("connect.oldUser"),false);
         } else {
             player.sendMessage(LangManager.getText("connect.newUser"),false);
         }
-        String title = LangManager.get("connect.title").replace("%s", player.getName().getString());
+        String title = String.format(LangManager.get("connect.title"),player.getName().getString());
         player.networkHandler.sendPacket(new TitleS2CPacket(Text.of(title)));
     }
 }

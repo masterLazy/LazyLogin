@@ -78,6 +78,11 @@ public class LazyLogin implements ModInitializer {
             player.sendMessage(Text.of(msg), false);
         }
     }
+    public static void sendGlobalMessage(net.minecraft.server.PlayerManager playerManager, String msg) {
+        for (ServerPlayerEntity player : playerManager.getPlayerList()) {
+            player.sendMessage(Text.of(msg), false);
+        }
+    }
 
     public static void sendFeedback(CommandContext<ServerCommandSource> ctx, String msg, boolean broadcastToOps) {
         ctx.getSource().sendFeedback(() -> Text.literal(msg),broadcastToOps);

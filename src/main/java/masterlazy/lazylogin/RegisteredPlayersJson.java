@@ -25,17 +25,17 @@ public class RegisteredPlayersJson {
 
     public static boolean isCorrectPassword(String username, String password) {
         JsonObject playerObject = findPlayerObject(username);
-        return playerObject != null && playerObject.get("pwd_hash").getAsString().equals(sha256Hex(password));
+        return playerObject != null && playerObject.get("pwd_hash").getAsString().equalsIgnoreCase(sha256Hex(password));
     }
 
     private static JsonObject findPlayerObject(String username) {
         JsonObject playerObject = null;
-        if (jsonArray.size() == 0) {
+        if (jsonArray.isEmpty()) {
             return null;
         }
         for (int i = 0; i < jsonArray.size(); i++) {
             JsonObject playerObjectIndex = jsonArray.get(i).getAsJsonObject();
-            if (playerObjectIndex.get("name").getAsString().equals(username)) {
+            if (playerObjectIndex.get("name").getAsString().equalsIgnoreCase(username)) {
                 playerObject = playerObjectIndex;
                 break;
             }
@@ -48,7 +48,7 @@ public class RegisteredPlayersJson {
         if (playerObject != null) {
             for (int i = 0; i < jsonArray.size(); i++) {
                 JsonObject playerObjectIndex = jsonArray.get(i).getAsJsonObject();
-                if (playerObjectIndex.get("name").getAsString().equals(username)) {
+                if (playerObjectIndex.get("name").getAsString().equalsIgnoreCase(username)) {
                     playerObject = new JsonObject();
                     playerObject.addProperty("name", username);
                     playerObject.addProperty("pwd_hash", sha256Hex(password));
@@ -78,7 +78,7 @@ public class RegisteredPlayersJson {
         try {
             BufferedReader bufferedReader = Files.newReader(REGISTERED_PLAYERS, StandardCharsets.UTF_8);
             jsonArray = gson.fromJson(bufferedReader, JsonArray.class);
-            LazyLogin.LOGGER.info("(lazylogin) Loaded registered-players.json");
+            LazyLogin.LOGGER.info("[LazyLogin] Loaded(reloaded) registered-players.json");
         } catch (Exception e) {
             e.printStackTrace();
         }
