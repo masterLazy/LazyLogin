@@ -8,20 +8,19 @@ import net.minecraft.network.packet.s2c.play.TitleS2CPacket;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 
+import java.util.Objects;
+
 public class OnPlayerConnect {
     public static void handle(ServerPlayerEntity player) {
         PlayerSession playerSession = LazyLogin.initPlayer(player);
         String username = player.getName().getString();
         if(player.getIp().equals("127.0.0.1")) {
             playerSession.setLoggedIn(true);
-            if(! player.isCreative()) {
-                player.setInvulnerable(false);
-            }
-            LazyLogin.sendGlobalMessage(player.getServer().getPlayerManager(),String.format(LangManager.get("login.local"), username));
+            LazyLogin.sendGlobalMessage(Objects.requireNonNull(player.getServer()).getPlayerManager(),
+                    String.format(LangManager.get("login.local"), username));
             LazyLogin.LOGGER.info("[LazyLogin] Skipping login of local user {}", username);
         } else {
             playerSession.setLoggedIn(false);
-            player.setInvulnerable(true);
         }
         player.sendMessage(LangManager.getText("connect.msg"), false);
         if (RegisteredPlayersJson.isPlayerRegistered(username)) {

@@ -73,6 +73,7 @@ public class RegisteredPlayersJson {
 
     public static void read() {
         if (! REGISTERED_PLAYERS.exists()) {
+            LazyLogin.LOGGER.info("[LazyLogin] registered-players.json not found, creating a new one.");
             return;
         }
         try {
@@ -80,6 +81,7 @@ public class RegisteredPlayersJson {
             jsonArray = gson.fromJson(bufferedReader, JsonArray.class);
             LazyLogin.LOGGER.info("[LazyLogin] Loaded(reloaded) registered-players.json");
         } catch (Exception e) {
+            LazyLogin.LOGGER.error("[LazyLogin] Exception occurred when loading registered-players.json. Did you modified it wrongly?");
             e.printStackTrace();
         }
     }

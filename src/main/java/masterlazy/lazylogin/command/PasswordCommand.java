@@ -12,9 +12,13 @@ import static net.minecraft.server.command.CommandManager.argument;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.ClickEvent;
+import net.minecraft.text.HoverEvent;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
 
 import java.util.ArrayList;
-import java.util.Locale;
+import java.util.Objects;
 
 public class PasswordCommand {
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
@@ -27,7 +31,7 @@ public class PasswordCommand {
                                                     String oldPwd = StringArgumentType.getString(ctx, "oldPassword");
                                                     String newPwd = StringArgumentType.getString(ctx, "newPassword");
                                                     ServerPlayerEntity player = ctx.getSource().getPlayer();
-                                                    String username = player.getName().getString();
+                                                    String username = Objects.requireNonNull(player).getName().getString();
                                                     if (!RegisteredPlayersJson.isCorrectPassword(player.getName().getString(), oldPwd)) {
                                                         LazyLogin.sendFeedback(ctx, LangManager.get("pwd.change.incorrectPwd"), false);
                                                     } else if (!newPwd.equals(StringArgumentType.getString(ctx, "confirmPassword"))) {
@@ -35,7 +39,7 @@ public class PasswordCommand {
                                                     } else {
                                                         RegisteredPlayersJson.save(username, newPwd);
                                                         LazyLogin.sendFeedback(ctx, LangManager.get("pwd.change.success"), false);
-                                                        LazyLogin.LOGGER.info("[LazyLogin] " + username + " changed newPwd.");
+                                                        LazyLogin.LOGGER.info("[LazyLogin] " + username + " changed password.");
                                                         LazyLogin.playNotifySound(ctx);
                                                     }
                                                     return 1;
@@ -50,7 +54,11 @@ public class PasswordCommand {
                                     } else {
                                         String password = LazyLogin.generatePassword();
                                         RegisteredPlayersJson.save(target, password);
-                                        String feedback = LangManager.get("pwd.reset.success").replace("%s", target) + password;
+                                        MutableText feedback = Text.literal(LangManager.get("pwd.reset.success").replace("%s", target) + password);
+                                        feedback.setStyle(feedback.getStyle()
+                                                .withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, password))
+                                                .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,LangManager.getText(("pwd.copy"))))
+                                        );
                                         LazyLogin.sendFeedback(ctx, feedback, false);
                                         LazyLogin.LOGGER.info("[LazyLogin] {}'s password has been reset to: {}", target, password);
                                     }

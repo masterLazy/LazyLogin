@@ -2,10 +2,7 @@ package masterlazy.lazylogin;
 
 import masterlazy.lazylogin.command.*;
 import com.mojang.brigadier.context.CommandContext;
-import net.fabricmc.fabric.api.event.player.*;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.packet.s2c.play.PlaySoundS2CPacket;
-import net.minecraft.network.packet.s2c.play.TitleS2CPacket;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.command.ServerCommandSource;
 import net.fabricmc.api.ModInitializer;
@@ -14,7 +11,6 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -27,15 +23,6 @@ public class LazyLogin implements ModInitializer {
     public static final Logger LOGGER = LogManager.getLogger("lazylogin");
     private static final SecureRandom random = new SecureRandom();
 
-    private ActionResult eventCallback(PlayerEntity player) {
-        if (playerManager.get((ServerPlayerEntity) player).isLoggedIn()) {
-            return ActionResult.PASS;
-        } else {
-            ((ServerPlayerEntity)player).networkHandler.sendPacket(new TitleS2CPacket(LangManager.getText("unlogged.title")));
-            return ActionResult.FAIL;
-        }
-    }
-
     @Override
     public void onInitialize() {
         RegisteredPlayersJson.read();
@@ -47,12 +34,6 @@ public class LazyLogin implements ModInitializer {
             PasswordCommand.register(dispatcher);
             WhitelistCommand.register(dispatcher);
         });
-        // Register listeners
-        AttackBlockCallback.EVENT.register((player, world, hand, pos, direction) -> eventCallback(player));
-        AttackEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> eventCallback(player));
-        UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> eventCallback(player));
-        UseEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> eventCallback(player));
-        UseItemCallback.EVENT.register((player, world, hand) -> eventCallback(player));
     }
 
     public static PlayerSession getPlayer(ServerPlayerEntity player) {
@@ -85,7 +66,10 @@ public class LazyLogin implements ModInitializer {
     }
 
     public static void sendFeedback(CommandContext<ServerCommandSource> ctx, String msg, boolean broadcastToOps) {
-        ctx.getSource().sendFeedback(() -> Text.literal(msg),broadcastToOps);
+        ctx.getSource().sendFeedback(() -> Text.of(msg), broadcastToOps);
+    }
+    public static void sendFeedback(CommandContext<ServerCommandSource> ctx, Text txt, boolean broadcastToOps) {
+        ctx.getSource().sendFeedback(() -> txt, broadcastToOps);
     }
 
     public static void playNotifySound(CommandContext<ServerCommandSource> ctx) {

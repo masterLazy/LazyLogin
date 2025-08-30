@@ -17,14 +17,12 @@
   "pwd.change.incorrectPwd": "§c旧密码不匹配，请重试",
   "pwd.change.pwdNotMatch": "§c两次输入的密码不一致， 请重试",
   "pwd.change.success": "§e密码更改成功",
-
   "pwd.reset.unregistered": "§c该玩家尚未注册",
   "pwd.reset.success": "§e已重置%s的密码为:",
-
   "pwd.reload.success": "§e密码已重新加载",
-
   "pwd.list.begin": "§e共有%d名已注册玩家\n",
   "pwd.list.warn": "§c共有%d名未注册玩家在白名单中\n",
+  "pwd.copy": "单击拷贝密码到剪贴板",
 
   "unlogged.msg": "§e请先登录再发送信息",
   "unlogged.cmd": "§e请先登录再执行命令",
